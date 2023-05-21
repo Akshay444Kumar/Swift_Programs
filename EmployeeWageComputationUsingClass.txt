@@ -1,0 +1,61 @@
+class Employee {
+    let IS_Full_Time = 1
+    let IS_ABSENT = 2
+    let IS_PART_TIME = 3
+    let WAGE_PER_HOUR = 20
+    let FULL_DAY_HOURS = 8
+    let PART_TIME_HOURS = 4
+    let WORKING_DAYS_PER_MONTH: Float = 20.0
+    let MAX_WORKING_HOURS = 100
+    
+    func checkAttendence () -> Int {
+        let attendance = Int.random(in: 1...3)
+        return attendance
+    }
+    
+    func calculateDailyWage () -> (Int, Int, Float) {
+        var dailyWage = 0
+        var dailyWorkingHours = 0
+        var workDays : Float = 0
+        let attendance = checkAttendence()
+        switch attendance {
+            case IS_Full_Time:
+                dailyWage = WAGE_PER_HOUR * FULL_DAY_HOURS
+                dailyWorkingHours = 8
+                workDays = 1.0
+            case IS_ABSENT:
+                dailyWage = 0
+                dailyWorkingHours = 0
+                workDays = 0.0
+            case IS_PART_TIME:
+                dailyWage = WAGE_PER_HOUR * PART_TIME_HOURS
+                dailyWorkingHours = 4
+                workDays = 0.5
+            default:
+            print("No such option")
+        }
+        return (dailyWage, dailyWorkingHours, workDays)
+    }
+    
+    func calculateMonthlyWage () -> Int {
+        var monthlyWage = 0
+        var totalWorkingHours = 0
+        var totalworkDays : Float = 0.0
+        for _ in 1...20 {
+            let result = calculateDailyWage()
+            let dailyWage = result.0
+            let dailyWorkingHours = result.1
+            let workDays = result.2
+            if totalWorkingHours + dailyWorkingHours <= MAX_WORKING_HOURS && totalworkDays + workDays <= WORKING_DAYS_PER_MONTH {
+                monthlyWage = monthlyWage + dailyWage
+                totalWorkingHours = totalWorkingHours + dailyWorkingHours
+                totalworkDays = totalworkDays + workDays
+            } else {
+                continue
+            }
+        }
+        return monthlyWage
+    }
+}
+var emp1 = Employee()
+print(emp1.calculateMonthlyWage())
